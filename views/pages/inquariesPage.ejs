@@ -1,0 +1,231 @@
+<div class="uk-container">
+    <select class="uk-select uk-form-small uk-width-1-6 uk-float-right month">
+        <option value="01">Януари   </option>    
+        <option value="02">Февруари </option>
+        <option value="03">Март     </option>
+        <option value="04">Април    </option>
+        <option value="05">Май      </option>
+        <option value="06">Юни      </option>
+        <option value="07">Юли      </option>
+        <option value="08">Август   </option>
+        <option value="09">Септември</option>
+        <option value="10">Октомври </option>
+        <option value="11">Ноември  </option>
+        <option value="12">Декември </option>
+    </select>
+    <div id="days" style="display:none">
+        <input class="uk-input uk-form-small uk-width-1-6 uk-float-right to" type="date"></input>
+        <input class="uk-input uk-form-small uk-width-1-6 uk-float-right from" type="date"></input>
+    </div>
+    <select class="uk-select uk-form-small uk-width-1-6 uk-float-right uk-margin-right type">
+        <option value="month" >За месец</option>    
+        <option value="period">За срок</option>
+    </select>
+</div>
+<br/>
+<!--<div class="uk-container">
+    <div uk-grid>
+        <form method='post' id="submitForm" margin="0">
+            <td style="padding:10px 3px"><select class="uk-select" name="type">
+            <input class="uk-input uk-form-small" name="dates[]" type='date'/>
+            <input class="uk-input uk-form-small" name="dates[]" type='date'/>
+            <td>
+                <a class="uk-icon-link" id="submit" uk-icon="icon: check"></a>
+                <a class="uk-icon-link" id="back" uk-icon="icon: reply"></a>
+            </td>
+        </form>
+    </div>
+</div>-->
+
+<div class="uk-container">
+    <div uk-grid>
+        <table class="uk-width-1-2 uk-table uk-table-striped uk-table-small uk-table-hover">
+            <caption>
+                <p class="uk-h3 uk-display-inline">Приходи</p>
+            </caption>
+            <thead>
+                <tr>
+                    <th class="uk-width-1-3">Тип </th>
+                    <th class="uk-width-1-2">Описание</th>
+                    <th class="uk-width-auto">Сума</th>
+                    <th class="uk-width-auto">Дата</th>
+                </tr>
+            </thead>
+            <tbody id="incomes">
+                <% Incomes.forEach(function(income){ %>
+                    <tr id="<%= income.id %>" style="background-color: RGBA(50, 210, 150, 0.4)">
+                        <td name="type"         class="uk-text-small"><%= income.type %></td>
+                        <td name="description"  class="uk-text-small"><%= income.description %></td>
+                        <td name="sum"          class="uk-text-small"><%= income.sum %></td>
+                        <td name="date"         class="uk-text-small"><%= income.date %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <table class="uk-width-1-2 uk-table uk-table-striped uk-table-small">
+            <caption>
+                <p class="uk-h3 uk-display-inline">Разходи</p>
+            </caption>
+            <thead>
+                <tr>
+                    <th class="uk-width-1-3">Тип </th>
+                    <th class="uk-width-1-2">Описание</th>
+                    <th class="uk-width-auto">Сума</th>
+                    <th class="uk-width-auto">Дата</th>
+                </tr>
+            </thead>
+            <tbody id="expense">
+                <% Expense.forEach(function(expense){ %>
+                    <tr id="<%= expense.id %>" style="background-color: RGBA(240, 80, 110, 0.3)">
+                        <td name="type"         class="uk-text-small"><%= expense.type %></td>
+                        <td name="description"  class="uk-text-small"><%= expense.description %></td>
+                        <td name="sum"          class="uk-text-small"><%= expense.sum %></td>
+                        <td name="date"         class="uk-text-small"><%= expense.date %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <table class="uk-width-1-1 uk-table uk-table-striped uk-table-small uk-margin-remove-top">
+            <thead>
+                <tr>
+                    <th class="uk-width-1-3">Приход</th>
+                    <th class="uk-width-1-2">Разход</th>
+                    <th class="uk-width-1-3">Тотално</th>
+                    
+                </tr>
+            </thead>
+            <tbody id="total">
+                <tr style="background-color: RGBA(0, 130, 220, 0.5)">
+                    <td id="totalInc"></td>
+                    <td id="totalExp"></td>
+                    <td id="Total"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+     $(document).ready(function(){
+         var inc = 0,exp = 0,tek=0;
+         $("#expense tr td[name=sum]").each(function(){
+            exp += parseFloat($(this).text());
+         })
+         $("#incomes tr td[name=sum]").each(function(){
+            inc += parseFloat($(this).text());
+        })
+        $("#totalInc").text(inc);
+        $("#totalExp").text(exp);
+        $("#Total").text(inc-exp);
+        $(".type").on('change',function(){
+            $(".month").toggle()
+            $("#days").toggle()
+            $('tr').prop('hidden',false)
+        })
+        $(".month").on('change',function(){
+            exp=0,inc=0;
+            $("#expense").find('td[name=date]').each(function(){
+                
+                if(new Date($(this).text()).getMonth()+1 !=$(".month").val()){
+                    $(this).parent().prop('hidden',true)
+                }else{
+                    $(this).parent().prop('hidden',false)
+                    exp += parseFloat($(this).parent().find('td[name=sum]').text());
+                }
+            })
+            $("#incomes").find('td[name=date]').each(function(){
+                if(new Date($(this).text()).getMonth()+1 !=$(".month").val()){
+                    $(this).parent().prop('hidden',true)
+                }else{
+                    $(this).parent().prop('hidden',false)
+                    inc += parseFloat($(this).parent().find('td[name=sum]').text());
+                }
+            })
+            $("#totalInc").text(inc);
+            $("#totalExp").text(exp);
+            $("#Total").text(inc-exp);
+        })
+        $(".month").find('option[value="'+(new Date().getMonth()+1)+'"]').attr('selected',"selected").trigger('change')
+        
+        $("#days").children().on('change',function(){
+            if($(".from").val()==''){
+                if($(".to").val()==''){
+                    $('tr').prop('hidden',false)
+                    exp=0,inc=0;
+                    $("#expense tr td[name=sum]").each(function(){
+                        exp += parseFloat($(this).text());
+                    })
+                    $("#incomes tr td[name=sum]").each(function(){
+                        inc += parseFloat($(this).text());
+                    })
+                }else{
+                    $("tr").find('td[name=date]').each(function(){
+                        exp=0,inc=0;
+                        $("#expense").find('td[name=date]').each(function(){
+                            if(new Date($(".to").val())<new Date($(this).text())){
+                                $(this).parent().prop('hidden',true)
+                            }else{
+                                $(this).parent().prop('hidden',false)
+                                exp += parseFloat($(this).parent().find('td[name=sum]').text());
+                            }
+                        })
+                        $("#incomes").find('td[name=date]').each(function(){
+                            if(new Date($(".to").val())<new Date($(this).text())){
+                                $(this).parent().prop('hidden',true)
+                            }else{
+                                $(this).parent().prop('hidden',false)
+                                inc += parseFloat($(this).parent().find('td[name=sum]').text());
+                            }
+                        })
+                    })
+                }
+            }else{
+                if($(".to").val()==''){
+                    
+                    $("tr").find('td[name=date]').each(function(){
+                        exp=0,inc=0;
+                        $("#expense").find('td[name=date]').each(function(){
+                            if(new Date($(".from").val())>new Date($(this).text())){
+                                $(this).parent().prop('hidden',true)
+                            }else{
+                                $(this).parent().prop('hidden',false)
+                                exp += parseFloat($(this).parent().find('td[name=sum]').text());
+                            }
+                        })
+                        $("#incomes").find('td[name=date]').each(function(){
+                            if(new Date($(".from").val())>new Date($(this).text())){
+                                $(this).parent().prop('hidden',true)
+                            }else{
+                                $(this).parent().prop('hidden',false)
+                                inc += parseFloat($(this).parent().find('td[name=sum]').text());
+                            }
+                        })
+                    })
+                }else{
+                    $("tr").find('td[name=date]').each(function(){
+                        exp=0,inc=0;
+                        $("#expense").find('td[name=date]').each(function(){
+                            if( (new Date($(".from").val())>new Date($(this).text())) || (new Date($(".to").val())<new Date($(this).text())) ){
+                                $(this).parent().prop('hidden',true)
+                            }else{
+                                $(this).parent().prop('hidden',false)
+                                exp += parseFloat($(this).parent().find('td[name=sum]').text());
+                            }
+                        })
+                        $("#incomes").find('td[name=date]').each(function(){
+                            if( (new Date($(".from").val())>new Date($(this).text())) || (new Date($(".to").val())<new Date($(this).text())) ){
+                                $(this).parent().prop('hidden',true)
+                            }else{
+                                $(this).parent().prop('hidden',false)
+                                inc += parseFloat($(this).parent().find('td[name=sum]').text());
+                            }
+                        })
+                    })
+                }
+            }
+            $("#totalInc").text(inc);
+            $("#totalExp").text(exp);
+            $("#Total").text(inc-exp);
+        })
+     })
+</script>

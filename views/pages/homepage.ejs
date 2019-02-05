@@ -1,0 +1,40 @@
+<style>
+.uk-child-width-1-7 > * {
+width: calc(100% * 1 / 7.001);
+}
+
+.uk-card {
+border: 1px solid #DDD;
+box-shadow: 1px 1px 1px #DDD;
+}
+</style>
+<div class="uk-container uk-container-large">
+    <div id="cal" uk-grid></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.3/moment-with-locales.min.js"></script>
+<script src="/table/Calendar.js"></script>
+<script>
+    $(document).ready(function(){
+        Calendar(moment().format('YYYY-MM'));
+                        // dates:[
+                console.log(    moment(d=new Date).startOf('month').format('YYYY-MM-DD'));
+                console.log(    moment(d=new Date).endOf('month').format('YYYY-MM-DD'))
+                // ]
+        io.socket.request({
+            method: 'get',
+            url: '/eventList',
+            data: {
+                dates:[
+                    moment(d=new Date).startOf('month').format('YYYY-MM-DD'),
+                    moment(d=new Date).endOf('month').format('YYYY-MM-DD')
+                ]
+            }
+        }, function(resData){
+            // console.log(resData);
+            $.each(resData, function(index, event){
+                console.log(event['date'])
+                $("#"+event['date']).append($('<span/>',{ class: "uk-label-warning", text: event['description']}))
+            })
+        })
+    });
+</script>

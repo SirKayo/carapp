@@ -1,0 +1,176 @@
+<div class="uk-container uk-container-large">
+    <div uk-grid>
+        <table class="uk-table uk-table-striped uk-table-small uk-table-hover">
+            <caption>
+                <p class="uk-h3 uk-display-inline">Клиенти</p>
+                <a id="add" class="uk-icon-link uk-display-inline pointer" uk-icon="icon: plus" page="client" data-id="0"></a>
+                <div class="uk-margin uk-display-inline">
+                    <form class="uk-search uk-search-default uk-align-right" id="searchForm">
+                        <span uk-search-icon></span>
+                        <input id="search" name="search" class="uk-search-input" type="search" placeholder="Search..." value=""/>
+                    </form>
+                </div>
+            </caption>
+            <thead>
+                <tr>
+                    <th class="uk-table-shrink">Име </th>
+                    <th class="uk-table-shrink">Фирма</th>
+                    <th class="uk-table-shrink">Булстат</th>
+                    <th class="uk-table-shrink">МОЛ</th>
+                    <th class="uk-table-shrink">Адрес</th>
+                    <th class="uk-table-shrink">Номер на шофьорска книжка</th>
+                    <th class="uk-table-shrink">Валидна до</th>
+                    <th class="uk-table-shrink">Издадена от МВР</th>
+                    <th class="uk-table-shrink">Телефонен номер</th>
+                    <th class="uk-table-shrink">Имейл</th>
+                    <th class="uk-table-shrink">Опции</th>
+                </tr>
+            </thead>
+            <tbody id="table">
+                <tr id="formRow" style="display:none">
+                    <form method='post' id="submitForm" margin="0">
+                        <td style="padding:10px 3px"><input style="border-style: solid" class="uk-input uk-form-small" name="name" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="firm" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="bulstat" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="mol" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="address" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="licenseID" type='text'/>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="licenseDate" type='date'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="licenseMVR" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="phone" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="email" type='text'/></td>
+                        <td>
+                            <a class="uk-icon-link" id="submit" uk-icon="icon: check"></a>
+                            <a class="uk-icon-link" id="back" uk-icon="icon: reply"></a>
+                        </td>
+                    </form>
+                </tr>
+                <% Clients.forEach(function(client){ %>
+                    <tr id="<%= client.id %>">
+                        <td name="name"         class="uk-text-small"><%= client.name %></td>
+                        <td name="firm"         class="uk-text-small"><%= client.firm %></td>
+                        <td name="bulstat"      class="uk-text-small"><%= client.bulstat%></td>
+                        <td name="mol"          class="uk-text-small"><%= client.mol%></td>
+                        <td name="address"      class="uk-text-small"><%= client.address%></td>
+                        <td name="licenseID"    class="uk-text-small"><%= client.licenseID%></td>
+                        <td name="licenseDate"  class="uk-text-small"><%= client.licenseDate%></td>
+                        <td name="licenseMVR"   class="uk-text-small"><%= client.licenseMVR %></td>
+                        <td name="phone"        class="uk-text-small"><%= client.phone %></td>
+                        <td name="email"        class="uk-text-small"><%= client.email %></td>
+                        <td>
+                            <a class="uk-icon-link edit" data-id="<%= client.id %>" uk-icon="icon: pencil"/>
+                            <a class="uk-icon-link trash" data-id="<%= client.id %>" uk-icon="icon: trash"/>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $("#table").on('change input paste','input',function(){
+            switch($(this).attr('name')){
+                case 'name':
+                var nameCheck = /\S{3,}/;
+                if(nameCheck.test($(this).val())){
+                    $(this).addClass("uk-form-success")
+                    $(this).removeClass("uk-form-danger")
+                }else{
+                    $(this).removeClass("uk-form-success")
+                    $(this).addClass("uk-form-danger")
+                }
+                    break;
+                case 'firm':
+                var firmCheck = /\S{3,}/;
+                if(firmCheck.test($(this).val())){
+                    $(this).addClass("uk-form-success")
+                    $(this).removeClass("uk-form-danger")
+                }else{
+                    $(this).removeClass("uk-form-success")
+                    $(this).addClass("uk-form-danger")
+                }
+                    break;
+                case 'bulstat':
+                var bulstatCheck = /[0-9]{9,13}/;
+                if(bulstatCheck.test($(this).val())){
+                    $(this).addClass("uk-form-success")
+                    $(this).removeClass("uk-form-danger")
+                }else{
+                    $(this).removeClass("uk-form-success")
+                    $(this).addClass("uk-form-danger")
+                }
+                    break;
+                case 'mol':
+                var molCheck = /\S{3,}/;
+                if(molCheck.test($(this).val())){
+                    $(this).addClass("uk-form-success")
+                    $(this).removeClass("uk-form-danger")
+                }else{
+                    $(this).removeClass("uk-form-success")
+                    $(this).addClass("uk-form-danger")
+                }
+                    break;
+                case 'address':
+                    var addressCheck = /\S*/
+                    if(addressCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'licenseID':
+                    var idCheck = /[0-9]{10}/;
+                    if(idCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                        break;
+                case 'licenseDate':
+                    if($(this).val()!=''){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                    break;
+                case 'licenseMVR':
+                    var MVRCheck = /\S*/;
+                    if(MVRCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'phone':
+                    var phoneCheck = /([+][0-9]{3}|0{1})[0-9 ]{9,}/;
+                    if(phoneCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'email':
+                    var emailCheck = /\w[a-z0-9._+-]*@\w[a-z._]*\.\w{2,}/;
+                    if(emailCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+            }
+        })
+    });
+</script>

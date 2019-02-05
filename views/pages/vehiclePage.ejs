@@ -1,0 +1,217 @@
+<div class="uk-container uk-container-large">
+    <div uk-grid>
+        <table class="uk-table uk-table-striped uk-table-small uk-table-hover">
+            <caption>
+                <p class="uk-h3 uk-display-inline">Автомобили</p>
+                <a id="add" class="uk-icon-link uk-display-inline pointer" uk-icon="icon: plus" page="vehicles" data-id="0"></a>
+                <div class="uk-margin uk-display-inline">
+                    <form class="uk-search uk-search-default uk-align-right" id="searchForm">
+                        <span uk-search-icon></span>
+                        <input id="search" name="search" class="uk-search-input" type="search" placeholder="Search..." value=""/>
+                    </form>
+                </div>
+            </caption>
+            <thead>
+                <tr>
+                    <th class="uk-form-shrink">Марка</th>
+                    <th class="uk-form-shrink">Модел</th>
+                    <th class="uk-form-shrink">Регистрационен номер</th>
+                    <th class="uk-form-shrink">Тип</th>
+                    <th class="uk-form-shrink">Километраж</th>
+                    <th class="uk-form-shrink">Срок на валидност на гражданско</th>
+                    <th class="uk-form-shrink">Срок на валидност на автокаско</th>
+                    <th class="uk-form-shrink">Срок за годишен преглед</th>
+                    <th class="uk-form-shrink">Препоръчителна смяна на масло</th>
+                    <th class="uk-form-shrink">Последна смяна на масло на</th>
+                    <th class="uk-form-shrink">Номер на шаси</th>
+                    <th class="uk-form-shrink">Разходна норма</th>
+                    <th class="uk-form-shrink">Резервоар</th>
+                    <th class="uk-form-shrink">Други</th>
+                    <th class="uk-form-shrink">Опции</th>
+                </tr>
+            </thead>
+            <tbody id="table">
+                <tr id="formRow" style="display:none">
+                    <form method='post' id="submitForm" margin="0">
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="brand" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="model" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="licenseNumber" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="type" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="mileage" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="validityCit" type='date'/>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="validityAuto" type='date'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="annual" type='date'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="gravg" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="lastSw" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="chassis" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="spendNorm" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="reservoir" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="etc" type='text'/></td>
+                        
+                        <td>
+                            <a class="uk-icon-link" id="submit" uk-icon="icon: check"></a>
+                            <a class="uk-icon-link" id="back" uk-icon="icon: reply"></a>
+                        </td>
+                    </form>
+                </tr>
+                <% Vehicles.forEach(function(vehicle){ %>
+                    <tr id="<%= vehicle.id %>">
+                        <td name="brand"        class="uk-text-small"><%= vehicle.brand%></td>
+                        <td name="model"        class="uk-text-small"><%= vehicle.model%></td>
+                        <td name="licenseNumber"class="uk-text-small"><%= vehicle.licenseNumber%></td>
+                        <td name="type"         class="uk-text-small"><%= vehicle.type%></td>
+                        <td name="mileage"      class="uk-text-small"><%= vehicle.mileage%></td>
+                        <td name="validityCit"  class="uk-text-small"><%= vehicle.validityCit%></td>
+                        <td name="validityAuto" class="uk-text-small"><%= vehicle.validityAuto%></td>
+                        <td name="annual"       class="uk-text-small"><%= vehicle.annual%></td>
+                        <td name="gravg"        class="uk-text-small"><%= vehicle.gravg%></td>
+                        <td name="lastSw"       class="uk-text-small"><%= vehicle.lastSw%></td>
+                        <td name="chassis"      class="uk-text-small"><%= vehicle.chassis%></td>
+                        <td name="spendNorm"    class="uk-text-small"><%= vehicle.spendNorm%></td>
+                        <td name="reservoir"    class="uk-text-small"><%= vehicle.reservoir%></td>
+                        <td name="etc"          class="uk-text-small"><%= vehicle.etc%></td>
+                        <td>
+                            <a class="uk-icon-link edit" data-id="<%= vehicle.id %>" uk-icon="icon:pencil" />
+                            <a class="uk-icon-link trash" data-id="<%= vehicle.id %>" uk-icon="icon:trash" />
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $("#table").on('change input paste','input',function(){
+            switch($(this).attr('name')){
+                case 'brand':
+                    var brandCheck = /\S{3,}/;
+                    if(brandCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'model':
+                    var modelCheck = /\S{3,}/;
+                    if(modelCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'licenseNumber':
+                    var lnCheck = /[А-Я]{2}[0-9]{4}[А-Я]{2}/;
+                    if(lnCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'type':
+                    var typeCheck = /\S{3,}/;
+                    if(typeCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'milleage':
+                    var nameCheck = /[0-9]{1,}/ч;
+                    if(nameCheck.test($(this).vчal())){
+                        $(this).addClass("uk-foчrm-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'validityCit':
+                    if($(this).val()!=''){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'validityAuto':
+                    if($(this).val()!=''){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'annual':
+                    if($(this).val()!=''){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'gravg':
+                    var gravgCheck = /\S{3,}/;
+                    if(gravgCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'lastSW':
+                    var typeCheck = /\S{3,}/;
+                    if(typeCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'chassis':
+                    var chassisCheck = /\S{17}/;
+                    if(chassisCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'spendNorm':
+                    var typeCheck = /\S{1,}/;
+                    if(typeCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'reservoir':
+                    var typeCheck = /\S{1,}/;
+                    if(typeCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+            }
+        })
+    });
+</script>

@@ -1,0 +1,98 @@
+<div class="uk-container">
+    <div uk-grid>
+        <table class="uk-table uk-table-striped uk-table-small uk-table-hover">
+            <caption>
+                <p class="uk-h3 uk-display-inline">Приходи</p>
+                <a id="add" class="uk-icon-link uk-display-inline pointer pointer" uk-icon="icon: plus" page="income" data-id="0"></a>
+                <div class="uk-margin uk-display-inline">
+                    <form class="uk-search uk-search-default uk-align-right" id="searchForm">
+                        <span uk-search-icon></span>
+                        <input id="search" name="search" class="uk-search-input" type="search" placeholder="Search..." value=""/>
+                    </form>
+                </div>
+            </caption> 
+            <thead>
+                <tr>
+                    <th class="uk-table-shrink">Тип </th>
+                    <th class="uk-table-shrink">Описание</th>
+                    <th class="uk-table-shrink">Сума</th>
+                    <th class="uk-table-shrink">Дата</th>
+                    <th class="uk-table-shrink">Опции</th>
+                </tr>
+            </thead>
+            <tbody id="table">
+                <tr id="formRow" style="display:none">
+                    <form method='post' id="submitForm" margin="0">
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="type" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="description" type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="sum"  type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="date" type='date'/></td>
+                        <td>
+                            <a class="uk-icon-link" id="submit" uk-icon="icon: check"></a>
+                            <a class="uk-icon-link" id="back" uk-icon="icon: reply"></a>
+                        </td>
+                    </form>
+                </tr>
+                <% Incomes.forEach(function(income){ %>
+                    <tr id="<%= income.id %>">
+                        <td name="type"         class="uk-text-small"><%= income.type %></td>
+                        <td name="description"  class="uk-text-small"><%= income.description %></td>
+                        <td name="sum"          class="uk-text-small"><%= income.sum %></td>
+                        <td name="date"         class="uk-text-small"><%= income.date %></td>
+                        <td>
+                            <a class="uk-icon-link edit" data-id="<%= income.id %>" uk-icon="icon: pencil"/>
+                            <a class="uk-icon-link trash" data-id="<%= income.id %>" uk-icon="icon: trash"/>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $("#table").on('change input paste','input',function(){
+            switch($(this).attr('name')){
+                case 'type':
+                    var nameCheck = /\S{2,}/;
+                    if(nameCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'description':
+                    var descCheck = /\S{0,}/;
+                    if(descCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'sum':
+                    var sumCheck = /\S{2,}/;
+                    if(sumCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'date':
+                    if($(this).val()!=''){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+            }
+        })
+    });
+</script>

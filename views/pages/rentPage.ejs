@@ -1,0 +1,290 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.3/moment-with-locales.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<div class="uk-container uk-container-large">
+    <div uk-grid>
+        <table class="uk-table uk-table-striped uk-table-small uk-table-hover">
+            <caption>
+                <p class="uk-h3 uk-display-inline">Наеми</p>
+                <a id="add" class="uk-icon-link uk-display-inline pointer" uk-icon="icon: plus" page="rent" data-id="0"></a>
+                <div class="uk-margin uk-display-inline">
+                    <form class="uk-search uk-search-default uk-align-right" id="searchForm">
+                        <span uk-search-icon></span>
+                        <input id="search" name="search" class="uk-search-input" type="search" placeholder="Search..." value=""/>
+                    </form>
+                </div>
+            </caption>
+            <thead>
+                <tr>
+                    <th class="uk-table-shrink">Име </th>
+                    <th class="uk-table-shrink">Фирма</th>
+                    <th class="uk-table-shrink">Адрес</th>
+                    <th class="uk-table-shrink">Телефонен номер</th>
+                    <th class="uk-width-1-6">Кола</th>
+                    <th class="uk-table-shrink">КМ при вземане</th>
+                    <th class="uk-table-shrink">КМ при връщане</th>
+                    <th class="uk-table-shrink">Отдаваща фирма</th>
+                    <th class="uk-table-shrink">Дата на везмане</th>
+                    <th class="uk-table-shrink">Час на вземане</th>
+                    <th class="uk-table-shrink">Срок в дни</th>
+                    <th class="uk-table-shrink">Сума</th>
+                    <th class="uk-table-shrink">Депозит</th>
+                    <th class="uk-table-shrink">Опции</th>
+                </tr>
+            </thead>
+            <tbody id="table">
+                <tr id="formRow" style="display:none">
+                    <form method='post' id="submitForm" margin="0">
+                        <td style="padding:10px 3px">
+                            <select class="js-example-basic-single uk-select name-select" name="name">
+                                <option class="def" value=" "></option>
+                                <% Clients.forEach(function(client){ %>
+                                <option value="<%= client.name %>"> <%= client.name %></option>
+                                <% }) %>
+                            </select>
+                        </td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="firm"          type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="address"       type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="phone"         type='text'/></td>
+                        <td style="padding:10px 3px">
+                            <select class="js-example-basic-single uk-select uk-form-width-medium brand-select" name="car">
+                                <option class="def" value=" "></option>
+                                <% Vehicles.forEach(function(vehicle){ %>
+                                <option value="<%= vehicle.brand %> <%= vehicle.model %> <%= vehicle.licenseNumber %>"><%= vehicle.brand %> <%= vehicle.model %> <%= vehicle.licenseNumber %></option>
+                                <% }) %>
+                            </select>
+                        </td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="kmtaken"       type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="kmreturned"    type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="carFirm"       type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="from"          type='date'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="fhr"           type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="due"           type='text'/></td>
+                        <td style="padding:10px 3px"><input class="uk-input uk-form-small" name="sum"           type='text'/></td>
+                        <td style="padding:10px 3px" class="uk-child-width-expand">
+                            <div class="uk-display-inline">
+                                <div  class="uk-float-left uk-width-1-6 uk-margin">
+                                    <input class="uk-checkbox deposit" type="checkbox">
+                                </div>
+                                <div  class="uk-float-right uk-width-2-3">
+                                    <input class="uk-input uk-form-small depositField" name="deposit" type='text' disabled/>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a class="uk-icon-link" id="submit" uk-icon="icon: check"></a>
+                            <a class="uk-icon-link" id="back" uk-icon="icon: reply"></a>
+                        </td>
+                    </form>
+                </tr>
+                <% Rents.forEach(function(rent){ %>
+                    <tr id="<%= rent.id %>">
+                        <td name="name"         class="uk-text-small"><%= rent.name %></td>
+                        <td name="firm"         class="uk-text-small"><%= rent.firm %></td>
+                        <td name="address"      class="uk-text-small"><%= rent.address %></td>
+                        <td name="phone"        class="uk-text-small"><%= rent.phone %></td>
+                        <td name="car"          class="uk-text-small"><%= rent.car %></td>
+                        <td name="kmtaken"      class="uk-text-small"><%= rent.kmtaken %></td>
+                        <td name="kmreturned"   class="uk-text-small"><%= rent.kmreturned %></td>
+                        <td name="carFirm"      class="uk-text-small"><%= rent.carFirm %></td>
+                        <td name="from"         class="uk-text-small"><%= rent.from %></td>
+                        <td name="fhr"          class="uk-text-small"><%= rent.fhr %></td>
+                        <td name="due"          class="uk-text-small"><%= rent.due %></td>
+                        <td name="sum"          class="uk-text-small"><%= rent.sum %></td>
+                        <td name="deposit"      class="uk-text-small"><%= rent.deposit %></td>
+                        <td>
+                            <a class="uk-icon-link edit"  data-id="<%= rent.id %>" uk-icon="icon: pencil"/>
+                            <a class="uk-icon-link trash" data-id="<%= rent.id %>" uk-icon="icon: trash"/>
+                            <a class="uk-icon-link print" data-id="<%= rent.id %>" uk-icon="icon: download"/>
+                            <% if(!rent.cashed){ %>
+                                <a class="uk-icon-link cash" data-id="<%= rent.id %>" uk-icon="icon: play"/>
+                            <% } %>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $("#table").on('click','.print',function(){
+            id=$(this).attr('data-id')
+            io.socket.get('/rent/'+id,function(rent){
+                io.socket.get('/client?where={"name":{"contains":"'+rent.name+'"}}',function(client){
+                    var nu=rent.car
+                    var value=''
+                    for(var i=8;i>0;i--){
+                        value+=nu.charAt(nu.length-i)
+                    }
+                    io.socket.get('/vehicles?where={"licenseNumber":{"contains":"'+value+'"}}',function(vehicle){
+                        var payload={
+                            rent:rent,
+                            client:client,
+                            vehicle:vehicle
+                        }
+                        io.socket.post('/rent/print',payload,function(resData){
+                            console.log(resData.status);
+                            if(resData.status == "Okay")
+                                window.open('/ViewerJS/page2.xlsx','_blank')
+                        });
+                    })
+                })
+            })
+        })
+        $('.name-select').on('change',function(){
+            name=$(this).val()
+            $('td').find('input[name="firm"]').val('')
+            $('td').find('input[name="address"]').val('')
+            $('td').find('input[name="phone"]').val('')
+            if(name!=' '){
+                io.socket.get('/client?where={"name":{"contains":"'+name+'"}}',function(resData){
+                    $('td').find('input[name="firm"]').val(resData[0].firm)
+                    $('td').find('input[name="address"]').val(resData[0].address)
+                    $('td').find('input[name="phone"]').val(resData[0].phone)
+                })
+                $('option.def').remove
+            }
+        })
+        $('.brand-select').on('change',function(){
+            
+            nu=$(this).val()
+            $('td').find('input[name="kmtaken"]').val('')
+            if(nu!=' '){
+                var value=''
+                for(var i=8;i>0;i--){
+                    value+=nu.charAt(nu.length-i)
+                }
+                io.socket.get('/vehicles?where={"licenseNumber":{"contains":"'+value+'"}}',function(resData){
+                    $('td').find('input[name="kmtaken"]').val('')
+                    $('td').find('input[name="kmtaken"]').val(resData[0].mileage)
+                })
+                $('option.def').remove
+            }
+        })
+        $('.js-example-basic-multiple').select2();
+        $('.js-example-basic-single').select2();
+
+        $("#table").on('click','.deposit',function(){
+            if($(this).prop("checked") == false){
+                $(".depositField").prop('disabled',true)
+            }else{
+                $(".depositField").prop('disabled',false)
+            }
+        })
+        $("#table").on('click','.cash',function(){
+            id=$(this).attr('data-id')
+            io.socket.get('/rent/'+id,function(rent){
+                data={
+                    date: ""+moment().format('DD-MM-YYYY'),
+                    description: ""+rent.name+', '+rent.car+', от '+rent.from+' за '+rent.due+' дни',
+                    sum: ""+rent.sum,
+                    type: "Наем",
+                }       
+                io.socket.post('/income',data,function(resData){});
+                io.socket.patch('/rent/'+id,{cashed:true},function(resData){})
+            })
+            $("tr#"+id).find("a.cash").remove()
+        })
+    });
+
+    $("#table").on('change input paste','input',function(){
+            switch($(this).attr('name')){
+                case 'name':
+                    if($(this).val()!=' '){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'firm':
+                    var firmCheck = /\S{3,}/;
+                    if(firmCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'address':
+                    var addressCheck = /\S*/
+                    if(addressCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'phone':
+                    var phoneCheck = /([+][0-9]{3}|0{1})[0-9 ]{9,}/;
+                    if(phoneCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'car':
+                    if($(this).val()!=' '){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'kmtaken':
+                    if($(this).val()!=''){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'from':
+                    if($(this).val()!=''){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'fhr':
+                    fhrCheck=/[0-9]{2}[:][0-9]{2}/;
+                    if(fhrCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'due':
+                if($(this).val()!=''){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+                case 'sum':
+                    var sumCheck = /\S{2,}/;
+                    if(sumCheck.test($(this).val())){
+                        $(this).addClass("uk-form-success")
+                        $(this).removeClass("uk-form-danger")
+                    }else{
+                        $(this).removeClass("uk-form-success")
+                        $(this).addClass("uk-form-danger")
+                    }
+                break;
+            }
+        })
+</script>
