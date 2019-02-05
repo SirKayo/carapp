@@ -51,7 +51,7 @@ module.exports.datastores = {
     *                                                                          *
     ***************************************************************************/
     adapter: 'sails-mongo',
-    url: 'mongodb://sails:k7Gc6SXEOxesIkKM@mongodb/mongodb',
+    url: 'mongodb://127.0.0.1:27017',
 
   },
 
